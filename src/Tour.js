@@ -34,7 +34,7 @@ const Tour = () => {
             },
           ],
           when: {
-            show() {
+            hide() {
               // Show the overlay only for the first step
               const overlay = document.querySelector(
                 '.shepherd-modal-overlay-container'
@@ -62,15 +62,6 @@ const Tour = () => {
               text: 'Next',
             },
           ],
-          when: {
-            show() {
-              // Show the overlay only for the first step
-              const overlay = document.querySelector(
-                '.shepherd-modal-overlay-container'
-              );
-              if (overlay) overlay.style.display = 'block';
-            },
-          },
         },
       ],
     });
