@@ -6,9 +6,10 @@ import Overlay from './Overlay';
 const Tour = () => {
   const anchorRef = useRef(null);
   const tourRef = useRef(null);
-
+  const [useOverLay, setUseOverlay] = React.useState(true);
   useEffect(() => {
     const tour = new Shepherd.Tour({
+      useModalOverlay: useOverLay,
       defaultStepOptions: {
         classes: 'shepherd-theme-arrows, tour-window',
       },
@@ -32,14 +33,44 @@ const Tour = () => {
               text: 'Next',
             },
           ],
-          when:{
-            show: () => {
-              const node = document.querySelector('.first-element');
-              console.log(node.style);
-              node.style.borderRadius = '50%';
-              node.style.background = 'white'
-            }
-          }
+          when: {
+            show() {
+              // Show the overlay only for the first step
+              const overlay = document.querySelector(
+                '.shepherd-modal-overlay-container'
+              );
+              if (overlay) overlay.style.display = 'none';
+            },
+          },
+        },
+        {
+          id: 'step1',
+          text: 'Welcome to the 2 Tour!',
+          attachTo: { element: '.first-element', on: 'bottom' },
+          buttons: [
+            {
+              action() {
+                return this.cancel();
+              },
+              classes: 'shepherd-button-secondary',
+              text: 'Exit',
+            },
+            {
+              action() {
+                return this.next();
+              },
+              text: 'Next',
+            },
+          ],
+          when: {
+            show() {
+              // Show the overlay only for the first step
+              const overlay = document.querySelector(
+                '.shepherd-modal-overlay-container'
+              );
+              if (overlay) overlay.style.display = 'block';
+            },
+          },
         },
       ],
     });
@@ -57,7 +88,6 @@ const Tour = () => {
         This is the first element for the tour.
       </div>
       <div ref={tourRef}>{/* Render the tour content here */}</div>
-      <Overlay anchorRef={anchorRef} tourRef={tourRef} />
     </>
   );
 };
